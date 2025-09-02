@@ -3,6 +3,7 @@ using DirectoryService.Domain.Locations;
 using DirectoryService.Domain.Models;
 using DirectoryService.Domain.Positions;
 using DirectoryService.Domain.ValueObjects;
+using Path = DirectoryService.Domain.ValueObjects.Path;
 
 namespace DirectoryService.Domain.Departments;
 
@@ -19,10 +20,10 @@ public class Department : Shared.Entity<DepartmentId>
         DepartmentId id, 
         Name name, 
         Identifier identifier,
-        string path,
+        Path path,
         short depth,
-        IEnumerable<Location> locations,
-        IEnumerable<Position> positions) 
+        IEnumerable<DepartmentLocation> locations,
+        IEnumerable<DepartmentPosition> positions) 
         : base(id)
     {
         Name = name;
@@ -41,7 +42,7 @@ public class Department : Shared.Entity<DepartmentId>
     
     public IReadOnlyList<Department> Children => _children;
     
-    public string Path { get; private set; } // Денорм. путь (sales.it.dev-team)
+    public Path Path { get; private set; } // Денорм. путь (sales.it.dev-team)
     
     public short Depth { get; private set; } // Глубина подразделения
 
@@ -51,17 +52,17 @@ public class Department : Shared.Entity<DepartmentId>
     
     public DateTime UpdatedAt { get; private set; } = DateTime.UtcNow;
     
-    public IReadOnlyList<Location> Locations { get; private set; }
+    public IReadOnlyList<DepartmentLocation> Locations { get; private set; }
     
-    public IReadOnlyList<Position> Positions { get; private set; }
+    public IReadOnlyList<DepartmentPosition> Positions { get; private set; }
 
     public static Result<Department, string> Create(
         Name name, 
         Identifier identifier, 
-        string path, 
+        Path path, 
         short depth,
-        IEnumerable<Location>? locations,
-        IEnumerable<Position>? positions)
+        IEnumerable<DepartmentLocation>? locations,
+        IEnumerable<DepartmentPosition>? positions)
     {
         if(locations is null || !locations.Any())
             return "locations cannot be null or empty";

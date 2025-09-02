@@ -13,7 +13,7 @@ public class Location : Shared.Entity<LocationId>
     {
     }
 
-    public Location(LocationId id, Name name, Address address, TimeZone timeZone, IEnumerable<Department> departments) 
+    public Location(LocationId id, Name name, Address address, TimeZone timeZone, IEnumerable<DepartmentLocation> departments) 
         : base(id)
     {
         Name = name;
@@ -34,13 +34,13 @@ public class Location : Shared.Entity<LocationId>
     
     public DateTime UpdatedAt { get; private set; } = DateTime.UtcNow;
     
-    public IReadOnlyList<Department> Departments { get; private set; }
+    public IReadOnlyList<DepartmentLocation> Departments { get; private set; }
 
     public static Result<Location, string> Create(
         Name name, 
         Address address, 
         TimeZone timeZone, 
-        IEnumerable<Department>? departments)
+        IEnumerable<DepartmentLocation>? departments)
     {
         if (departments is null || !departments.Any())
             return "departments cannot be null or empty";

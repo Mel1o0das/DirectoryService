@@ -11,7 +11,7 @@ public class Position : Shared.Entity<PositionId>
     {
     }
 
-    private Position(PositionId id, Name name, Description description, IEnumerable<Department> departments)
+    private Position(PositionId id, Name name, Description description, IEnumerable<DepartmentPosition> departments)
         : base(id)
     {
         Name = name;
@@ -29,12 +29,12 @@ public class Position : Shared.Entity<PositionId>
     
     public DateTime UpdatedAt { get; private set; } = DateTime.UtcNow;
     
-    public IReadOnlyList<Department> Departments { get; private set; }
+    public IReadOnlyList<DepartmentPosition> Departments { get; private set; }
 
     public static Result<Position, string> Create(
         Name name, 
         Description description, 
-        IEnumerable<Department>? departments)
+        IEnumerable<DepartmentPosition>? departments)
     {
         if (departments is null || !departments.Any())
             return "Departments cannot be empty";
