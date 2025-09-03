@@ -26,7 +26,54 @@ public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
                 .HasMaxLength(Constants.Text.MAX_LOW_TEXT_LENGTH)
                 .HasColumnName("department_name");
         });
+
+        builder.OwnsOne(d => d.Identifier, db =>
+        {
+            db.Property(i => i.Value)
+                .IsRequired()
+                .HasMaxLength(Constants.Text.MAX_LOW_TEXT_LENGTH)
+                .HasColumnName("department_identifier");
+        });
         
-        // builder.Navigation(d => d.Name).();
+        builder.Property(d => d.ParentId)
+            .IsRequired(false)
+            .HasConversion(
+                id => id!.Value,
+                value => DepartmentId.Create(value))
+            .HasColumnName("parent_id");
+
+        builder.ComplexProperty(d => d.Path, db =>
+        {
+            db.Property(p => p.Value)
+                .IsRequired()
+                .HasColumnName("department_path");
+        });
+
+        builder.Property(d => d.Depth)
+            .IsRequired()
+            .HasColumnName("department_depth");
+        
+        builder.Property(d => d.IsActive)
+            .IsRequired()
+            .HasDefaultValue(true)
+            .HasColumnName("is_active");
+        
+        builder.Property(d => d.CreatedAt)
+            .IsRequired()
+            .HasColumnName("created_at");
+        
+        builder.Property(d => d.UpdatedAt)
+            .IsRequired()
+            .HasColumnName("updated_at");
+
+        builder.HasMany(d => d.Locations)
+            .WithOne()
+            .HasForeignKey(dl => dl.DepartmentId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.HasMany(d => d.Positions)
+            .WithOne()
+            .HasForeignKey(dp => dp.DepartmentId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
