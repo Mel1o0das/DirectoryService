@@ -6,22 +6,18 @@ namespace DirectoryService.Domain.Departments;
 public record DepartmentPosition
 {
     public DepartmentPosition(
+        Guid id,
         DepartmentId departmentId, 
-        Department department, 
-        PositionId positionId, 
-        Position position)
+        PositionId positionId)
     {
+        Id = id;
         DepartmentId = departmentId;
-        Department = department;
         PositionId = positionId;
-        Position = position;
     }
+    
+    public Guid Id { get; }
     
     public DepartmentId DepartmentId { get; }
     
-    public Department Department { get; }
-    
     public PositionId PositionId { get; }
-    
-    public Position Position { get; }
 }

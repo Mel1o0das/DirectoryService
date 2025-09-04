@@ -6,22 +6,19 @@ namespace DirectoryService.Domain.Departments;
 public class DepartmentLocation
 {
     public DepartmentLocation(
+        Guid id,
         DepartmentId departmentId, 
-        Department department, 
-        LocationId locationId, 
-        Location location)
+        LocationId locationId)
     {
+        Id = id;
         DepartmentId = departmentId;
-        Department = department;
         LocationId = locationId;
-        Location = location;
     }
+    
+    public Guid Id { get; }
     
     public DepartmentId DepartmentId { get; }
     
-    public Department Department { get; }
-    
     public LocationId LocationId { get; }
     
-    public Location Location { get; }
 }

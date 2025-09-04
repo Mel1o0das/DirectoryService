@@ -1,3 +1,4 @@
+using DirectoryService.Infrastructure;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -5,6 +6,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 builder.Services.AddOpenApi();
+
+builder.Services.AddScoped<ApplicationDbContext>(_ => 
+    new ApplicationDbContext(builder.Configuration.GetConnectionString("DirectoryServiceDb")!));
 
 var app = builder.Build();
 
