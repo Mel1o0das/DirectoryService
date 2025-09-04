@@ -12,12 +12,13 @@ public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
     {
         builder.ToTable("departments");
         
-        builder.HasKey(d => d.Id).HasName("department_id");
+        builder.HasKey(d => d.Id);
         
         builder.Property(d => d.Id)
             .HasConversion(
                 id => id.Value,
-                value => DepartmentId.Create(value));
+                value => DepartmentId.Create(value))
+            .HasColumnName("department_id");
 
         builder.OwnsOne(d => d.Name, db =>
         {
@@ -37,10 +38,10 @@ public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
         
         builder.Property(d => d.ParentId)
             .IsRequired(false)
+            .HasColumnName("parent_id")
             .HasConversion(
                 id => id!.Value,
-                value => DepartmentId.Create(value))
-            .HasColumnName("parent_id");
+                value => DepartmentId.Create(value));
 
         builder.ComplexProperty(d => d.Path, db =>
         {

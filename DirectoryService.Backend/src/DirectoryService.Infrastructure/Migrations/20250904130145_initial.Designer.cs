@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DirectoryService.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250903190042_Initial")]
-    partial class Initial
+    [Migration("20250904130145_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -29,14 +29,12 @@ namespace DirectoryService.Infrastructure.Migrations
             modelBuilder.Entity("DirectoryService.Domain.Departments.Department", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("department_id");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
-
-                    b.Property<Guid?>("DepartmentId")
-                        .HasColumnType("uuid");
 
                     b.Property<short>("Depth")
                         .HasColumnType("smallint")
@@ -66,10 +64,7 @@ namespace DirectoryService.Infrastructure.Migrations
                                 .HasColumnName("department_path");
                         });
 
-                    b.HasKey("Id")
-                        .HasName("department_id");
-
-                    b.HasIndex("DepartmentId");
+                    b.HasKey("Id");
 
                     b.ToTable("departments", (string)null);
                 });
@@ -78,7 +73,8 @@ namespace DirectoryService.Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("department_location_id");
 
                     b.Property<Guid>("DepartmentId")
                         .HasColumnType("uuid")
@@ -88,8 +84,7 @@ namespace DirectoryService.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("location_id");
 
-                    b.HasKey("Id")
-                        .HasName("department_location_id");
+                    b.HasKey("Id");
 
                     b.HasIndex("DepartmentId");
 
@@ -102,7 +97,8 @@ namespace DirectoryService.Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("department_position_id");
 
                     b.Property<Guid>("DepartmentId")
                         .HasColumnType("uuid")
@@ -112,8 +108,7 @@ namespace DirectoryService.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("location_id");
 
-                    b.HasKey("Id")
-                        .HasName("department_position_id");
+                    b.HasKey("Id");
 
                     b.HasIndex("DepartmentId");
 
@@ -125,7 +120,8 @@ namespace DirectoryService.Infrastructure.Migrations
             modelBuilder.Entity("DirectoryService.Domain.Locations.Location", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("location_id");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
@@ -162,8 +158,7 @@ namespace DirectoryService.Infrastructure.Migrations
                                 .HasColumnName("location_timezone");
                         });
 
-                    b.HasKey("Id")
-                        .HasName("location_id");
+                    b.HasKey("Id");
 
                     b.ToTable("locations", (string)null);
                 });
@@ -171,7 +166,8 @@ namespace DirectoryService.Infrastructure.Migrations
             modelBuilder.Entity("DirectoryService.Domain.Positions.Position", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("position_id");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
@@ -206,18 +202,13 @@ namespace DirectoryService.Infrastructure.Migrations
                                 .HasColumnName("position_name");
                         });
 
-                    b.HasKey("Id")
-                        .HasName("position_id");
+                    b.HasKey("Id");
 
                     b.ToTable("positions", (string)null);
                 });
 
             modelBuilder.Entity("DirectoryService.Domain.Departments.Department", b =>
                 {
-                    b.HasOne("DirectoryService.Domain.Departments.Department", null)
-                        .WithMany("Children")
-                        .HasForeignKey("DepartmentId");
-
                     b.OwnsOne("DirectoryService.Domain.ValueObjects.Identifier", "Identifier", b1 =>
                         {
                             b1.Property<Guid>("DepartmentId")
@@ -330,8 +321,6 @@ namespace DirectoryService.Infrastructure.Migrations
 
             modelBuilder.Entity("DirectoryService.Domain.Departments.Department", b =>
                 {
-                    b.Navigation("Children");
-
                     b.Navigation("Locations");
 
                     b.Navigation("Positions");

@@ -12,7 +12,9 @@ public class DepartmentLocationConfiguration : IEntityTypeConfiguration<Departme
     {
         builder.ToTable("department_locations");
         
-        builder.HasKey(dl => dl.Id).HasName("department_location_id");
+        builder.HasKey(dl => dl.Id);
+        
+        builder.Property(dl => dl.Id).HasColumnName("department_location_id");
 
         builder.Property(dl => dl.DepartmentId)
             .IsRequired()

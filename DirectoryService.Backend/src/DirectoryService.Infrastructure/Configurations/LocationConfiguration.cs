@@ -11,12 +11,13 @@ public class LocationConfiguration : IEntityTypeConfiguration<Location>
     {
         builder.ToTable("locations");
         
-        builder.HasKey(l => l.Id).HasName("location_id");
+        builder.HasKey(l => l.Id);
 
         builder.Property(l => l.Id)
             .HasConversion(
                 id => id.Value,
-                value => LocationId.Create(value));
+                value => LocationId.Create(value))
+            .HasColumnName("location_id");
 
         builder.ComplexProperty(l => l.Name, lb =>
         {

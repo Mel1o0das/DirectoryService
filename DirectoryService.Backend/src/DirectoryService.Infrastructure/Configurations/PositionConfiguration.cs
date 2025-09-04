@@ -11,12 +11,13 @@ public class PositionConfiguration : IEntityTypeConfiguration<Position>
     { 
         builder.ToTable("positions");
         
-        builder.HasKey(p => p.Id).HasName("position_id");
+        builder.HasKey(p => p.Id);
         
         builder.Property(p => p.Id)
             .HasConversion(
                 id => id.Value,
-                value => PositionId.Create(value));
+                value => PositionId.Create(value))
+            .HasColumnName("position_id");
 
         builder.ComplexProperty(p => p.Name, pb =>
         {

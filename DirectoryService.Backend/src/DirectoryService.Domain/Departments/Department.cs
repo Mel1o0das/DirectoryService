@@ -20,6 +20,7 @@ public class Department : Shared.Entity<DepartmentId>
         DepartmentId id, 
         Name name, 
         Identifier identifier,
+        DepartmentId? parentId,
         Path path,
         short depth,
         IEnumerable<DepartmentLocation> locations,
@@ -28,6 +29,7 @@ public class Department : Shared.Entity<DepartmentId>
     {
         Name = name;
         Identifier = identifier;
+        ParentId = parentId;
         Path = path;
         Depth = depth;
         Locations = locations.ToList();
@@ -40,7 +42,7 @@ public class Department : Shared.Entity<DepartmentId>
     
     public DepartmentId? ParentId { get; private set; }
     
-    public IReadOnlyList<Department> Children => _children;
+    //public IReadOnlyList<Department> Children => _children;
     
     public Path Path { get; private set; } // Денорм. путь (sales.it.dev-team)
     
@@ -59,6 +61,7 @@ public class Department : Shared.Entity<DepartmentId>
     public static Result<Department, string> Create(
         Name name, 
         Identifier identifier, 
+        DepartmentId? parentId,
         Path path, 
         short depth,
         IEnumerable<DepartmentLocation>? locations,
@@ -74,6 +77,7 @@ public class Department : Shared.Entity<DepartmentId>
             DepartmentId.NewDepartmentId(), 
             name, 
             identifier,
+            parentId,
             path,
             depth,
             locations,
