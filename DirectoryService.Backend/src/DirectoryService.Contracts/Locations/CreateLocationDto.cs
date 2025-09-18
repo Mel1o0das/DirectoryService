@@ -7,5 +7,4 @@ public record CreateLocationDto(
     string City,
     string Street,
     int StreetNumber,
-    string Timezone,
-    IEnumerable<DepartmentLocation> Departments);
+    string Timezone);

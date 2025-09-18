@@ -16,6 +16,8 @@ public class LocationsRepository : ILocationRepository
     {
         await _dbContext.AddAsync(location, cancellationToken);
         
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        
         return location.Id.Value;
     }
 }

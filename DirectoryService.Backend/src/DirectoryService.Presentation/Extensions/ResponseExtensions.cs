@@ -1,0 +1,26 @@
+﻿using DirectoryService.Domain.Shared;
+using DirectoryService.Presentation.Response;
+using Microsoft.AspNetCore.Mvc;
+
+namespace DirectoryService.Presentation.Extensions;
+
+public static class ResponseExtensions
+{
+    public static ActionResult ToResponse(this Error error)
+    {
+        var statusCode = error.Type switch
+        {
+            ErrorType.VALIDATION => StatusCodes.Status400BadRequest,
+            ErrorType.NOTFOUND => StatusCodes.Status404NotFound,
+            ErrorType.CONFLICT => StatusCodes.Status409Conflict,
+            ErrorType.FAILURE => StatusCodes.Status500InternalServerError,
+            _ => StatusCodes.Status500InternalServerError
+        };
+        
+        var responseError = new ResponseError(error.Code, error.Message, null);
+
+        var envelope = Envelope.Error([responseError]);
+
+        return new ObjectResult(envelope) { StatusCode = statusCode };
+    }
+}

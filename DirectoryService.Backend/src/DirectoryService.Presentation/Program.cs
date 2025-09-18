@@ -1,11 +1,13 @@
+using DirectoryService.Application;
 using DirectoryService.Infrastructure;
-using Swashbuckle.AspNetCore.SwaggerUI;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 builder.Services.AddOpenApi();
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure();
 
 builder.Services.AddScoped<ApplicationDbContext>(_ => 
     new ApplicationDbContext(builder.Configuration.GetConnectionString("DirectoryServiceDb")!));

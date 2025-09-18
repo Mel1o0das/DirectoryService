@@ -1,4 +1,5 @@
 using CSharpFunctionalExtensions;
+using DirectoryService.Domain.Shared;
 
 namespace DirectoryService.Domain.ValueObjects;
 
@@ -11,16 +12,16 @@ public record TimeZone
 
     public string Value { get; }
 
-    public static Result<TimeZone, string> Create(string value)
+    public static Result<TimeZone, Error> Create(string value)
     {
         if(string.IsNullOrWhiteSpace(value))
-            return "time zone cannot be empty";
+            return Errors.General.ValueIsRequired("timeZone");
         
         bool isValid = TimeZoneInfo.GetSystemTimeZones()
             .Any(z => z.Id.Equals(value, StringComparison.OrdinalIgnoreCase));
         
         if (!isValid)
-            return $"invalid IANA TimeZone: {value}";
+            return Errors.General.ValueIsInvalid("timeZone");
         
         return new TimeZone(value);
     }

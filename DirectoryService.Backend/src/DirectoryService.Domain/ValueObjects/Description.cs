@@ -12,10 +12,10 @@ public record Description
 
     public string Value { get; }
 
-    public static Result<Description, string> Create(string value)
+    public static Result<Description, Error> Create(string value)
     {
         if(string.IsNullOrWhiteSpace(value) || value.Length >= Constants.Text.MAX_HIGH_TEXT_LENGTH)
-            return "Description can not be empty or upper than length";
+            return Errors.General.ValueIsInvalid("description");
         
         return new Description(value);
     }
