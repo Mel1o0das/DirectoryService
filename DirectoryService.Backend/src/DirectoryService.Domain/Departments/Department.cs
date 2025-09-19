@@ -1,7 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
-using DirectoryService.Domain.Locations;
 using DirectoryService.Domain.Models;
-using DirectoryService.Domain.Positions;
+using DirectoryService.Domain.Shared;
 using DirectoryService.Domain.ValueObjects;
 using Path = DirectoryService.Domain.ValueObjects.Path;
 
@@ -9,8 +8,10 @@ namespace DirectoryService.Domain.Departments;
 
 public class Department : Shared.Entity<DepartmentId>
 {
-    private List<Department> _children = [];
-    
+    private readonly List<Department> _children = [];
+    private readonly List<DepartmentLocation> _locations;
+    private readonly List<DepartmentPosition> _positions;
+
     private Department(DepartmentId id)
         : base(id)
     {
@@ -22,9 +23,7 @@ public class Department : Shared.Entity<DepartmentId>
         Identifier identifier,
         DepartmentId? parentId,
         Path path,
-        short depth,
-        IEnumerable<DepartmentLocation> locations,
-        IEnumerable<DepartmentPosition> positions) 
+        short depth) 
         : base(id)
     {
         Name = name;
@@ -32,8 +31,6 @@ public class Department : Shared.Entity<DepartmentId>
         ParentId = parentId;
         Path = path;
         Depth = depth;
-        Locations = locations.ToList();
-        Positions = positions.ToList();
     }
     
     public Name Name { get; private set; } // 3 - 150 Символов, NOT NULL
@@ -53,34 +50,24 @@ public class Department : Shared.Entity<DepartmentId>
     public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
     
     public DateTime UpdatedAt { get; private set; } = DateTime.UtcNow;
-    
-    public IReadOnlyList<DepartmentLocation> Locations { get; private set; }
-    
-    public IReadOnlyList<DepartmentPosition> Positions { get; private set; }
 
-    public static Result<Department, string> Create(
+    public IReadOnlyList<DepartmentLocation> Locations => _locations;
+
+    public IReadOnlyList<DepartmentPosition> Positions => _positions;
+
+    public static Result<Department, Error> Create(
         Name name, 
         Identifier identifier, 
         DepartmentId? parentId,
         Path path, 
-        short depth,
-        IEnumerable<DepartmentLocation>? locations,
-        IEnumerable<DepartmentPosition>? positions)
+        short depth)
     {
-        if(locations is null || !locations.Any())
-            return "locations cannot be null or empty";
-        
-        if(positions is null || !positions.Any())
-            return "positions cannot be null or empty";
-        
         return new Department(
             DepartmentId.NewDepartmentId(), 
             name, 
             identifier,
             parentId,
             path,
-            depth,
-            locations,
-            positions);
+            depth);
     }
 }

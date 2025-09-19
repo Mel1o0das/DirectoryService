@@ -12,10 +12,10 @@ public record Name
 
     public string Value { get; }
 
-    public static Result<Name, string> Create(string value)
+    public static Result<Name, Error> Create(string value)
     {
         if(string.IsNullOrWhiteSpace(value) || value.Length >= Constants.Text.MAX_LOW_TEXT_LENGTH)
-            return "Name can not be empty or upper than length";
+            return Errors.General.ValueIsInvalid("name");
         
         return new Name(value);
     }

@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using DirectoryService.Domain.Shared;
 
 namespace DirectoryService.Domain.ValueObjects;
 
@@ -11,10 +12,10 @@ public record Path
 
     public string Value { get; }
 
-    public static Result<Path, string> Create(string value)
+    public static Result<Path, Error> Create(string value)
     {
         if(string.IsNullOrWhiteSpace(value))
-            return "value cannot be null or empty";
+            return Errors.General.ValueIsRequired("path");
 
         return new Path(value);
     }

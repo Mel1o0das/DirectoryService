@@ -13,12 +13,12 @@ public record Identifier
 
     public string Value { get; }
 
-    public static Result<Identifier, string> Create(string value)
+    public static Result<Identifier, Error> Create(string value)
     {
         if(string.IsNullOrWhiteSpace(value) || 
            value.Length >= Constants.Text.MAX_LOW_TEXT_LENGTH ||
            Regex.IsMatch(value, @"^[a-zA-Z]+$"))
-            return "value can not be null or empty or than length or contain only alphanumeric characters";
+            return Errors.General.ValueIsInvalid("identifier");
             
         return new Identifier(value);
     }

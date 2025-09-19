@@ -1,6 +1,6 @@
 using CSharpFunctionalExtensions;
 using DirectoryService.Domain.Departments;
-using DirectoryService.Domain.Models;
+using DirectoryService.Domain.Shared;
 using DirectoryService.Domain.ValueObjects;
 using TimeZone = DirectoryService.Domain.ValueObjects.TimeZone;
 
@@ -8,18 +8,19 @@ namespace DirectoryService.Domain.Locations;
 
 public class Location : Shared.Entity<LocationId>
 {
+    private readonly List<DepartmentLocation> _departments;
+
     private Location(LocationId id) 
         : base(id)
     {
     }
 
-    public Location(LocationId id, Name name, Address address, TimeZone timeZone, IEnumerable<DepartmentLocation> departments) 
+    public Location(LocationId id, Name name, Address address, TimeZone timeZone) 
         : base(id)
     {
         Name = name;
         Address = address;
         TimeZone = timeZone;
-        Departments = departments.ToList();
     }
     
     public Name Name { get; private set; }
@@ -33,23 +34,18 @@ public class Location : Shared.Entity<LocationId>
     public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
     
     public DateTime UpdatedAt { get; private set; } = DateTime.UtcNow;
-    
-    public IReadOnlyList<DepartmentLocation> Departments { get; private set; }
 
-    public static Result<Location, string> Create(
+    public IReadOnlyList<DepartmentLocation> Departments => _departments;
+
+    public static Result<Location, Error> Create(
         Name name, 
         Address address, 
-        TimeZone timeZone, 
-        IEnumerable<DepartmentLocation>? departments)
+        TimeZone timeZone)
     {
-        if (departments is null || !departments.Any())
-            return "departments cannot be null or empty";
-        
         return new Location(
             LocationId.NewLocationId(),
             name,
             address,
-            timeZone,
-            departments);
+            timeZone);
     }
 }
